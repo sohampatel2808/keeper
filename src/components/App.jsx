@@ -9,10 +9,29 @@ import CreateNote from './CreateNote';
 import { mockNotes } from '../mock-data/notes';
 
 class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      notes: []
+    };
+  }
+
+  handleAddNote(note) {
+    const cloneNotes = this.state.notes.slice();
+
+    note.id = cloneNotes.length;
+    cloneNotes.push(note);
+
+    this.setState({
+      notes: cloneNotes
+    });
+  }
+
   createNote(note) {
     return (
       <Note 
-        key={note.key}
+        key={note.id}
         title={note.title}
         content={note.content} />
     );
@@ -23,8 +42,11 @@ class App extends React.Component {
       <React.Fragment>
         <Header />
         
-        <CreateNote />
-        {mockNotes.map(this.createNote)}
+        <CreateNote 
+          onClick={(note) => {
+            this.handleAddNote(note);
+          }} />
+        {this.state.notes.map(this.createNote)}
 
         <Footer />
       </React.Fragment>
