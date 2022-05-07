@@ -4,6 +4,7 @@ import './App.css';
 import Header from './Header';
 import Footer from './Footer';
 import Note from './Note';
+import CreateNote from './CreateNote';
 
 import { mockNotes } from '../mock-data/notes';
 
@@ -22,6 +23,7 @@ class App extends React.Component {
       <React.Fragment>
         <Header />
         
+        <CreateNote />
         {mockNotes.map(this.createNote)}
 
         <Footer />
