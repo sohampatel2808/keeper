@@ -12,6 +12,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.handleNoteOperation = this.handleNoteOperation.bind(this);
+    this.createNote = this.createNote.bind(this);
+
     this.state = {
       notes: []
     };
@@ -36,6 +39,10 @@ class App extends React.Component {
         }
         break;
 
+      case NoteOperationType.EDIT:
+        console.log(note);
+        break;
+
       default:
         console.log('No note operation found');
     }
@@ -52,9 +59,7 @@ class App extends React.Component {
         id={note.id}
         title={note.title}
         content={note.content}
-        onClick={(note, operationType) => {
-          this.handleNoteOperation(note, operationType);
-        }} />
+        onClick={this.handleNoteOperation} />
     );
   }
 
@@ -63,16 +68,11 @@ class App extends React.Component {
       <React.Fragment>
         <Header />
         
-        <CreateNote 
-          onClick={(note) => {
-            this.handleNoteOperation(note, NoteOperationType.ADD);
-          }} />
+        <CreateNote
+          note={this.state.currentNote}
+          onClick={this.handleNoteOperation} />
 
-        {this.state.notes.map(
-          (note) => {
-            return this.createNote(note); 
-          }
-        )}
+        {this.state.notes.map(this.createNote)}
 
         <Footer />
       </React.Fragment>

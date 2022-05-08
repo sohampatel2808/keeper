@@ -4,12 +4,20 @@ import './Note.css';
 import { NoteOperationType } from '../model/note-operation.model';
 
 class Note extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleNoteOperation = this.handleNoteOperation.bind(this);
+  }
+
   handleNoteOperation(event) {
     const { name } = event.target;
 
     let operationType;
     if (name === 'delete') {
       operationType = NoteOperationType.DELETE;
+    } else if (name === 'edit') {
+      operationType = NoteOperationType.EDIT;
     }
 
     const note = {
@@ -28,10 +36,14 @@ class Note extends React.Component {
         <p>{this.props.content}</p>
         <button
           name='delete'
-          onClick={(event) => {
-            this.handleNoteOperation(event);
-          }}>
+          onClick={this.handleNoteOperation} >
           DELETE
+        </button>
+
+        <button
+          name='edit'
+          onClick={this.handleNoteOperation} >
+          EDIT
         </button>
       </div>
     );

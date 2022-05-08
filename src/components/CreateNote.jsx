@@ -1,9 +1,14 @@
 import React from "react";
+
 import './CreateNote.css';
+import { NoteOperationType } from '../model/note-operation.model';
 
 class CreateNote extends React.Component {
   constructor(props) {
     super(props);
+
+    this.handleAddNote = this.handleAddNote.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
 
     this.state = {
       title: '',
@@ -20,7 +25,7 @@ class CreateNote extends React.Component {
   }
 
   handleAddNote(event) {
-    this.props.onClick(this.state);
+    this.props.onClick(this.state, NoteOperationType.ADD);
 
     this.setState({
       title: '',
@@ -38,22 +43,16 @@ class CreateNote extends React.Component {
             name='title'
             value={this.state.title}
             placeholder='Title'
-            onChange={(event) => {
-              this.handleInputChange(event);
-            }} />
+            onChange={this.handleInputChange} />
 
           <textarea
             name='content'
             value={this.state.content}
             placeholder='Take a note...'
-            onChange={(event) => {
-              this.handleInputChange(event);
-            }} />
+            onChange={this.handleInputChange} />
 
           <button 
-            onClick={(event) => {
-              this.handleAddNote(event);
-            }}>
+            onClick={this.handleAddNote} >
             ADD
           </button>
         </form>
