@@ -20,29 +20,23 @@ class Note extends React.Component {
       operationType = NoteOperationType.EDIT;
     }
 
-    const note = {
-      id: this.props.id,
-      title: this.props.title,
-      content: this.props.content
-    };
-
-    this.props.onClick(note, operationType);
+    this.props.onClick(this.props.note, operationType);
   }
 
   render() {
     return (
       <div className='note'>
-        <h1>{this.props.title}</h1>
-        <p>{this.props.content}</p>
+        <h1>{this.props.note.title}</h1>
+        <p>{this.props.note.content}</p>
         <button
           name='delete'
-          onClick={this.handleNoteOperation} >
+          onClick={this.handleNoteOperation}>
           DELETE
         </button>
 
         <button
           name='edit'
-          onClick={this.handleNoteOperation} >
+          onClick={this.handleNoteOperation}>
           EDIT
         </button>
       </div>

@@ -13,11 +13,25 @@ class App extends React.Component {
     super(props);
 
     this.handleNoteOperation = this.handleNoteOperation.bind(this);
-    this.createNote = this.createNote.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
 
     this.state = {
-      notes: []
+      notes: [],
+      currentNote: {
+        id: '',
+        title: '',
+        content: ''
+      }
     };
+  }
+
+  handleInputChange(name, value) {
+    const cloneCurrentNote = this.state.currentNote;
+    cloneCurrentNote[name] = value;
+
+    this.setState({
+      currentNote: cloneCurrentNote
+    });
   }
 
   handleNoteOperation(note, operationType) {
@@ -25,42 +39,54 @@ class App extends React.Component {
 
     switch (operationType) {
       case NoteOperationType.ADD:
-        note.id = cloneNotes.length;
-        cloneNotes.push(note);
+        if (note.id) {
+          // update existing note object in notes array          
+          for (let i = 0; i < cloneNotes.length; i++) {
+            if (note.id === cloneNotes[i].id) {
+              cloneNotes[i] = {...note};
+            }
+          }
+        } else {
+          // add new note object in notes array
+          cloneNotes.push({
+            ...note,
+            id: cloneNotes.length
+          });
+        }
+
+        this.setState({
+          notes: cloneNotes,
+          currentNote: {
+            id: '',
+            title: '',
+            content: ''
+          }
+        });
         break;
 
       case NoteOperationType.DELETE:
-        let index = cloneNotes.findIndex(cloneNote => {
+        let deleteIndex = cloneNotes.findIndex(cloneNote => {
           return note.id === cloneNote.id;
         });
 
-        if (index >= 0) {
-          cloneNotes.splice(index, 1);
+        if (deleteIndex >= 0) {
+          cloneNotes.splice(deleteIndex, 1);
         }
+
+        this.setState({
+          notes: cloneNotes
+        });
         break;
 
       case NoteOperationType.EDIT:
-        console.log(note);
+        this.setState({
+          currentNote: {...note}
+        });
         break;
 
       default:
         console.log('No note operation found');
     }
-
-    this.setState({
-      notes: cloneNotes
-    });
-  }
-
-  createNote(note) {
-    return (
-      <Note 
-        key={note.id}
-        id={note.id}
-        title={note.title}
-        content={note.content}
-        onClick={this.handleNoteOperation} />
-    );
   }
 
   render() {
@@ -70,9 +96,14 @@ class App extends React.Component {
         
         <CreateNote
           note={this.state.currentNote}
-          onClick={this.handleNoteOperation} />
+          onClick={this.handleNoteOperation}
+          onHandleInputChange={this.handleInputChange} />
 
-        {this.state.notes.map(this.createNote)}
+        {this.state.notes.map(
+          (note) => {
+            return <Note key={note.id} note={note} onClick={this.handleNoteOperation} />
+          }
+        )}
 
         <Footer />
       </React.Fragment>

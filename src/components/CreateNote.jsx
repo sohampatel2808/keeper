@@ -9,29 +9,15 @@ class CreateNote extends React.Component {
 
     this.handleAddNote = this.handleAddNote.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
-
-    this.state = {
-      title: '',
-      content: ''
-    };
   }
 
   handleInputChange(event) {
     const { name, value } = event.target;
-
-    this.setState({
-      [name]: value
-    });
+    this.props.onHandleInputChange(name, value);
   }
 
   handleAddNote(event) {
-    this.props.onClick(this.state, NoteOperationType.ADD);
-
-    this.setState({
-      title: '',
-      content: ''
-    });
-
+    this.props.onClick(this.props.note, NoteOperationType.ADD);
     event.preventDefault();
   }
 
@@ -41,18 +27,17 @@ class CreateNote extends React.Component {
         <form>
           <input
             name='title'
-            value={this.state.title}
+            value={this.props.note.title}
             placeholder='Title'
             onChange={this.handleInputChange} />
 
           <textarea
             name='content'
-            value={this.state.content}
+            value={this.props.note.content}
             placeholder='Take a note...'
             onChange={this.handleInputChange} />
 
-          <button 
-            onClick={this.handleAddNote} >
+          <button onClick={this.handleAddNote}>
             ADD
           </button>
         </form>
