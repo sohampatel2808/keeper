@@ -50,7 +50,7 @@ class App extends React.Component {
           // add new note object in notes array
           cloneNotes.push({
             ...note,
-            id: cloneNotes.length
+            id: crypto.randomUUID()
           });
         }
 
@@ -99,11 +99,11 @@ class App extends React.Component {
           onClick={this.handleNoteOperation}
           onHandleInputChange={this.handleInputChange} />
 
-        {this.state.notes.map(
-          (note) => {
+        {
+          this.state.notes.map((note) => {
             return <Note key={note.id} note={note} onClick={this.handleNoteOperation} />
-          }
-        )}
+          })
+        }
 
         <Footer />
       </React.Fragment>
