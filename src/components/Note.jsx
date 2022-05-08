@@ -10,19 +10,6 @@ class Note extends React.Component {
     this.handleNoteOperation = this.handleNoteOperation.bind(this);
   }
 
-  handleNoteOperation(event) {
-    const { name } = event.target;
-
-    let operationType;
-    if (name === 'delete') {
-      operationType = NoteOperationType.DELETE;
-    } else if (name === 'edit') {
-      operationType = NoteOperationType.EDIT;
-    }
-
-    this.props.onClick(this.props.note, operationType);
-  }
-
   render() {
     return (
       <div className='note'>
@@ -41,6 +28,19 @@ class Note extends React.Component {
         </button>
       </div>
     );
+  }
+
+  handleNoteOperation(event) {
+    const { name } = event.target;
+
+    let operationType;
+    if (name === 'delete') {
+      operationType = NoteOperationType.DELETE;
+    } else if (name === 'edit') {
+      operationType = NoteOperationType.EDIT;
+    }
+
+    this.props.onClick(this.props.note, operationType);
   }
 }
 

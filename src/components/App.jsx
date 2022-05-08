@@ -17,76 +17,8 @@ class App extends React.Component {
 
     this.state = {
       notes: [],
-      currentNote: {
-        id: '',
-        title: '',
-        content: ''
-      }
+      currentNote: this.getDefaultNoteState()
     };
-  }
-
-  handleInputChange(name, value) {
-    const cloneCurrentNote = this.state.currentNote;
-    cloneCurrentNote[name] = value;
-
-    this.setState({
-      currentNote: cloneCurrentNote
-    });
-  }
-
-  handleNoteOperation(note, operationType) {
-    const cloneNotes = this.state.notes.slice();
-
-    switch (operationType) {
-      case NoteOperationType.ADD:
-        if (note.id) {
-          // update existing note object in notes array          
-          for (let i = 0; i < cloneNotes.length; i++) {
-            if (note.id === cloneNotes[i].id) {
-              cloneNotes[i] = {...note};
-            }
-          }
-        } else {
-          // add new note object in notes array
-          cloneNotes.push({
-            ...note,
-            id: crypto.randomUUID()
-          });
-        }
-
-        this.setState({
-          notes: cloneNotes,
-          currentNote: {
-            id: '',
-            title: '',
-            content: ''
-          }
-        });
-        break;
-
-      case NoteOperationType.DELETE:
-        let deleteIndex = cloneNotes.findIndex(cloneNote => {
-          return note.id === cloneNote.id;
-        });
-
-        if (deleteIndex >= 0) {
-          cloneNotes.splice(deleteIndex, 1);
-        }
-
-        this.setState({
-          notes: cloneNotes
-        });
-        break;
-
-      case NoteOperationType.EDIT:
-        this.setState({
-          currentNote: {...note}
-        });
-        break;
-
-      default:
-        console.log('No note operation found');
-    }
   }
 
   render() {
@@ -108,6 +40,88 @@ class App extends React.Component {
         <Footer />
       </React.Fragment>
     );
+  }
+
+  handleNoteOperation(note, operationType) {
+    let updatedState;
+
+    switch (operationType) {
+      case NoteOperationType.ADD:
+        updatedState = this.getAddNoteState({...note});
+        break;
+
+      case NoteOperationType.DELETE:
+        updatedState = this.getDeleteNoteState({...note});
+        break;
+
+      case NoteOperationType.EDIT:
+        updatedState = {
+          currentNote: {...note}
+        };
+        break;
+
+      default:
+        console.log('No note operation found');
+    }
+
+    this.setState(updatedState);
+  }
+
+  handleInputChange(name, value) {
+    const cloneCurrentNote = this.state.currentNote;
+    cloneCurrentNote[name] = value;
+
+    this.setState({
+      currentNote: cloneCurrentNote
+    });
+  }
+
+  getDefaultNoteState() {
+    return {
+      id: '',
+      title: '',
+      content: ''
+    };
+  }
+
+  getAddNoteState(note) {
+    const cloneNotes = this.state.notes.slice();
+
+    if (note.id) {
+      // update existing note object in notes array          
+      for (let i = 0; i < cloneNotes.length; i++) {
+        if (note.id === cloneNotes[i].id) {
+          cloneNotes[i] = note;
+        }
+      }
+    } else {
+      // add new note object in notes array
+      cloneNotes.push({
+        ...note,
+        id: crypto.randomUUID()
+      });
+    }
+
+    return {
+      notes: cloneNotes,
+      currentNote: this.getDefaultNoteState()
+    };
+  }
+
+  getDeleteNoteState(note) {
+    const cloneNotes = this.state.notes.slice();
+
+    let deleteIndex = cloneNotes.findIndex(cloneNote => {
+      return note.id === cloneNote.id;
+    });
+
+    if (deleteIndex >= 0) {
+      cloneNotes.splice(deleteIndex, 1);
+    }
+
+    return {
+      notes: cloneNotes
+    };
   }
 }
 

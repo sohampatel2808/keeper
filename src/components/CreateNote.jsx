@@ -11,16 +11,6 @@ class CreateNote extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
 
-  handleInputChange(event) {
-    const { name, value } = event.target;
-    this.props.onHandleInputChange(name, value);
-  }
-
-  handleAddNote(event) {
-    this.props.onClick(this.props.note, NoteOperationType.ADD);
-    event.preventDefault();
-  }
-
   render() {
     return (
       <React.Fragment>
@@ -43,6 +33,16 @@ class CreateNote extends React.Component {
         </form>
       </React.Fragment>
     );
+  }
+
+  handleInputChange(event) {
+    const { name, value } = event.target;
+    this.props.onHandleInputChange(name, value);
+  }
+
+  handleAddNote(event) {
+    this.props.onClick(this.props.note, NoteOperationType.ADD);
+    event.preventDefault();
   }
 }
 
