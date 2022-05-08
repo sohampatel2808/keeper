@@ -1,12 +1,12 @@
 import React from 'react';
+
 import './App.css';
+import { NoteOperationType } from '../model/note-operation.model';
 
 import Header from './Header';
 import Footer from './Footer';
 import Note from './Note';
 import CreateNote from './CreateNote';
-
-import { mockNotes } from '../mock-data/notes';
 
 class App extends React.Component {
   constructor(props) {
@@ -17,11 +17,28 @@ class App extends React.Component {
     };
   }
 
-  handleAddNote(note) {
+  handleNoteOperation(note, operationType) {
     const cloneNotes = this.state.notes.slice();
 
-    note.id = cloneNotes.length;
-    cloneNotes.push(note);
+    switch (operationType) {
+      case NoteOperationType.ADD:
+        note.id = cloneNotes.length;
+        cloneNotes.push(note);
+        break;
+
+      case NoteOperationType.DELETE:
+        let index = cloneNotes.findIndex(cloneNote => {
+          return note.id === cloneNote.id;
+        });
+
+        if (index >= 0) {
+          cloneNotes.splice(index, 1);
+        }
+        break;
+
+      default:
+        console.log('No note operation found');
+    }
 
     this.setState({
       notes: cloneNotes
@@ -32,8 +49,12 @@ class App extends React.Component {
     return (
       <Note 
         key={note.id}
+        id={note.id}
         title={note.title}
-        content={note.content} />
+        content={note.content}
+        onClick={(note, operationType) => {
+          this.handleNoteOperation(note, operationType);
+        }} />
     );
   }
 
@@ -44,9 +65,14 @@ class App extends React.Component {
         
         <CreateNote 
           onClick={(note) => {
-            this.handleAddNote(note);
+            this.handleNoteOperation(note, NoteOperationType.ADD);
           }} />
-        {this.state.notes.map(this.createNote)}
+
+        {this.state.notes.map(
+          (note) => {
+            return this.createNote(note); 
+          }
+        )}
 
         <Footer />
       </React.Fragment>
