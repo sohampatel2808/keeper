@@ -3,6 +3,9 @@ import React from "react";
 import './CreateNote.css';
 import { NoteOperationType } from '../model/note-operation.model';
 
+import AddIcon from '@mui/icons-material/Add';
+import Fab from '@mui/material/Fab';
+
 class CreateNote extends React.Component {
   constructor(props) {
     super(props);
@@ -27,9 +30,9 @@ class CreateNote extends React.Component {
             placeholder='Take a note...'
             onChange={this.handleInputChange} />
 
-          <button onClick={this.handleAddNote}>
-            ADD
-          </button>
+          <Fab className='fab-button' onClick={this.handleAddNote}>
+            <AddIcon />
+          </Fab>
         </form>
       </React.Fragment>
     );

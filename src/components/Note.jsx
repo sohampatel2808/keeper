@@ -3,6 +3,9 @@ import React from "react";
 import './Note.css';
 import { NoteOperationType } from '../model/note-operation.model';
 
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+
 class Note extends React.Component {
   constructor(props) {
     super(props);
@@ -18,13 +21,13 @@ class Note extends React.Component {
         <button
           name='delete'
           onClick={this.handleNoteOperation}>
-          DELETE
+          <DeleteIcon />
         </button>
 
         <button
           name='edit'
           onClick={this.handleNoteOperation}>
-          EDIT
+          <EditIcon />
         </button>
       </div>
     );
