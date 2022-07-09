@@ -22,6 +22,10 @@ class App extends React.Component {
   }
 
   render() {
+    const notes = this.state.notes.map((note) => {
+      return <Note key={note.id} note={note} onClick={this.handleNoteOperation} />
+    })
+
     return (
       <React.Fragment>
         <Header />
@@ -31,11 +35,7 @@ class App extends React.Component {
           onClick={this.handleNoteOperation}
           onHandleInputChange={this.handleInputChange} />
 
-        {
-          this.state.notes.map((note) => {
-            return <Note key={note.id} note={note} onClick={this.handleNoteOperation} />
-          })
-        }
+        {notes}
 
         <Footer />
       </React.Fragment>
@@ -47,7 +47,7 @@ class App extends React.Component {
 
     switch (operationType) {
       case NoteOperationType.ADD:
-        updatedState = this.getAddNoteState({...note});
+        updatedState = this.getAddorUpdatedNoteState({...note});
         break;
 
       case NoteOperationType.DELETE:
@@ -76,26 +76,18 @@ class App extends React.Component {
     });
   }
 
-  getDefaultNoteState() {
-    return {
-      id: '',
-      title: '',
-      content: ''
-    };
-  }
-
-  getAddNoteState(note) {
+  getAddorUpdatedNoteState(note) {
     const cloneNotes = this.state.notes.slice();
 
     if (note.id) {
-      // update existing note object in notes array          
+      // update existing note        
       for (let i = 0; i < cloneNotes.length; i++) {
         if (note.id === cloneNotes[i].id) {
           cloneNotes[i] = note;
         }
       }
     } else {
-      // add new note object in notes array
+      // add new note
       cloneNotes.push({
         ...note,
         id: crypto.randomUUID()
@@ -121,6 +113,14 @@ class App extends React.Component {
 
     return {
       notes: cloneNotes
+    };
+  }
+
+  getDefaultNoteState() {
+    return {
+      id: '',
+      title: '',
+      content: ''
     };
   }
 }

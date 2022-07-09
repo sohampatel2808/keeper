@@ -1,16 +1,17 @@
 import React from "react";
 
-import './Note.css';
-import { NoteOperationType } from '../model/note-operation.model';
-
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+
+import './Note.css';
+import { NoteOperationType } from '../model/note-operation.model';
 
 class Note extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleNoteOperation = this.handleNoteOperation.bind(this);
+    this.handleDeleteNote = this.handleDeleteNote.bind(this);
+    this.handleEditNote = this.handleEditNote.bind(this);
   }
 
   render() {
@@ -18,32 +19,24 @@ class Note extends React.Component {
       <div className='note'>
         <h1>{this.props.note.title}</h1>
         <p>{this.props.note.content}</p>
-        <button
-          name='delete'
-          onClick={this.handleNoteOperation}>
+
+        <button onClick={this.handleDeleteNote}>
           <DeleteIcon />
         </button>
 
-        <button
-          name='edit'
-          onClick={this.handleNoteOperation}>
+        <button onClick={this.handleEditNote}>
           <EditIcon />
         </button>
       </div>
     );
   }
 
-  handleNoteOperation(event) {
-    const { name } = event.target;
+  handleDeleteNote(event) {
+    this.props.onClick(this.props.note, NoteOperationType.DELETE);
+  }
 
-    let operationType;
-    if (name === 'delete') {
-      operationType = NoteOperationType.DELETE;
-    } else if (name === 'edit') {
-      operationType = NoteOperationType.EDIT;
-    }
-
-    this.props.onClick(this.props.note, operationType);
+  handleEditNote(event) {
+    this.props.onClick(this.props.note, NoteOperationType.EDIT);
   }
 }
 
